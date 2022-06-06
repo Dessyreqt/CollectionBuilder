@@ -138,19 +138,19 @@ namespace CollectionBuilder.Mtg
             if (cardDatabase.Cards[card] == null)
             {
                 var fixedCard = FixCardName(card);
-                if (cardDatabase.Cards[fixedCard] == null)
+                if (cardDatabase.Cards.data[fixedCard] == null)
                 {
                     throw new Exception("Could not find card! Please check name!");
                 }
                 else
                 {
-                    string group = GetCardGroup(cardDatabase.Cards[fixedCard], card);
+                    string group = GetCardGroup(cardDatabase.Cards.data[fixedCard], card);
                     AddCardToGroup(outputLists, group, card, count);
                 }
             }
             else
             {
-                string group = GetCardGroup(cardDatabase.Cards[card], card);
+                string group = GetCardGroup(cardDatabase.Cards.data[card], card);
                 AddCardToGroup(outputLists, group, card, count);
             }
         }
@@ -162,12 +162,12 @@ namespace CollectionBuilder.Mtg
                 outputLists[group] = new List<string>();
             }
 
-            outputLists[group].Add(string.Format("{0}\t{1}{2}", count, card, MtgDeckRules.ReservedList.Contains(card) ? " ®" : ""));
+            outputLists[group].Add(string.Format("{0}\t{1}", count, card, MtgDeckRules.ReservedList.Contains(card) ? " ®" : ""));
         }
 
         private string GetCardGroup(dynamic card, string cardName)
         {
-            foreach (string type in card["types"])
+            foreach (string type in card[0].types)
             {
                 if (type == "Land")
                 {
@@ -177,77 +177,93 @@ namespace CollectionBuilder.Mtg
 
             int actualColors = 0;
 
-            if (card["colors"] == null)
+            if (card[0].manaCost != null)
             {
-                if (card["manaCost"] != null)
+                if (card[0].manaCost.ToString().IndexOf("W") > -1)
                 {
-                    if (card["manaCost"].ToString().IndexOf("W") > -1)
-                    {
-                        actualColors++;
-                    }
-                    if (card["manaCost"].ToString().IndexOf("U") > -1)
-                    {
-                        actualColors++;
-                    }
-                    if (card["manaCost"].ToString().IndexOf("B") > -1)
-                    {
-                        actualColors++;
-                    }
-                    if (card["manaCost"].ToString().IndexOf("R") > -1)
-                    {
-                        actualColors++;
-                    }
-                    if (card["manaCost"].ToString().IndexOf("G") > -1)
-                    {
-                        actualColors++;
-                    }
+                    actualColors++;
                 }
-
-                if (actualColors == 0)
+                if (card[0].manaCost.ToString().IndexOf("U") > -1)
                 {
-                    return "Colorless";
+                    actualColors++;
+                }
+                if (card[0].manaCost.ToString().IndexOf("B") > -1)
+                {
+                    actualColors++;
+                }
+                if (card[0].manaCost.ToString().IndexOf("R") > -1)
+                {
+                    actualColors++;
+                }
+                if (card[0].manaCost.ToString().IndexOf("G") > -1)
+                {
+                    actualColors++;
                 }
             }
 
-            if (actualColors > 1 || (card["colors"] != null && card["colors"].Count > 1) || (cardName.Contains(" // ") && card["colorIdentity"].Count > 1))
+            if (actualColors == 0)
+            {
+                return "Colorless";
+            }
+
+            if (actualColors > 1 || (card[0].colors != null && card[0].colors.Count > 1) || (cardName.Contains(" // ") && card[0].colorIdentity.Count > 1))
             {
                 return "Multicolor";
             }
 
             if (actualColors == 1)
             {
-                if (card["manaCost"].ToString().IndexOf("W") > -1)
+                if (card[0].manaCost.ToString().IndexOf("W") > -1)
                 {
                     return "White";
                 }
-                if (card["manaCost"].ToString().IndexOf("U") > -1)
+                if (card[0].manaCost.ToString().IndexOf("U") > -1)
                 {
                     return "Blue";
                 }
-                if (card["manaCost"].ToString().IndexOf("B") > -1)
+                if (card[0].manaCost.ToString().IndexOf("B") > -1)
                 {
                     return "Black";
                 }
-                if (card["manaCost"].ToString().IndexOf("R") > -1)
+                if (card[0].manaCost.ToString().IndexOf("R") > -1)
                 {
                     return "Red";
                 }
-                if (card["manaCost"].ToString().IndexOf("G") > -1)
+                if (card[0].manaCost.ToString().IndexOf("G") > -1)
                 {
                     return "Green";
                 }
             }
 
-            return card["colors"][0];
+            return "Colorless";
         }
 
         private string FixCardName(string card)
         {
-            card = card.Replace("Ae", "Æ");
-            if (card.Contains(" // "))
+            //card = card.Replace("Ae", "Æ");
+
+            var replacements = new Dictionary<string, string>()
             {
-                card = card.Substring(0, card.IndexOf(" // "));
+                { "Bonecrusher Giant", "Bonecrusher Giant // Stomp" },
+                { "Brazen Borrower", "Brazen Borrower // Petty Theft" },
+                { "Jace, Vryn's Prodigy", "Jace, Vryn's Prodigy // Jace, Telepath Unbound" },
+                { "Malevolent Hermit", "Malevolent Hermit // Benevolent Geist" },
+                { "Outland Liberator", "Outland Liberator // Frenzied Trapbreaker" },
+                { "Sea Gate Restoration", "Sea Gate Restoration // Sea Gate, Reborn" },
+                { "Shatterskull Smashing", "Shatterskull Smashing // Shatterskull, the Hammer Pass" },
+                { "Silundi Vision", "Silundi Vision // Silundi Isle" },
+                { "Thing in the Ice", "Thing in the Ice // Awoken Horror" },
+                { "Valakut Awakening", "Valakut Awakening // Valakut Stoneforge" },
+            };
+
+            if (replacements.ContainsKey(card))
+            {
+                card = replacements[card];
             }
+            //if (card.Contains(" // "))
+            //{
+            //    card = card.Substring(0, card.IndexOf(" // "));
+            //}
 
             return card;
         }

@@ -19,7 +19,7 @@ namespace CollectionBuilder.Mtg
 
             var urlPattern = new Regex(@"/decks/view/\d+");
             var matches = urlPattern.Matches(response);
-            var deckUrls = (from Match match in matches select string.Format("http://mtgdecks.net{0}/txt", match.Value)).ToList();
+            var deckUrls = (from Match match in matches select string.Format("https://mtgdecks.net{0}/txt", match.Value)).ToList();
 
             foreach (var deckUrl in deckUrls.Distinct())
             {
