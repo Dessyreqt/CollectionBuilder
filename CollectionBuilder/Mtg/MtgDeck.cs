@@ -244,10 +244,13 @@ namespace CollectionBuilder.Mtg
 
             var replacements = new Dictionary<string, string>()
             {
+                { "Agadeem's Awakening", "Agadeem's Awakening // Agadeem, the Undercrypt" },
                 { "Bonecrusher Giant", "Bonecrusher Giant // Stomp" },
                 { "Brazen Borrower", "Brazen Borrower // Petty Theft" },
+                { "Fire/Ice", "Fire // Ice" },
                 { "Jace, Vryn's Prodigy", "Jace, Vryn's Prodigy // Jace, Telepath Unbound" },
                 { "Malevolent Hermit", "Malevolent Hermit // Benevolent Geist" },
+                { "Mayor of Avabruck", "Mayor of Avabruck // Howlpack Alpha" },
                 { "Outland Liberator", "Outland Liberator // Frenzied Trapbreaker" },
                 { "Sea Gate Restoration", "Sea Gate Restoration // Sea Gate, Reborn" },
                 { "Shatterskull Smashing", "Shatterskull Smashing // Shatterskull, the Hammer Pass" },

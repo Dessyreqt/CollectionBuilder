@@ -76,6 +76,7 @@
     <Compile Include="Mtg\MtgDeckRules.cs" />
     <Compile Include="Mtg\MtgDecksNetScraper.cs" />
     <Compile Include="Mtg\MtgDeckSqlCeWriter.cs" />
+    <Compile Include="Mtg\MtgGoldfishScraper.cs" />
     <Compile Include="Mtg\MtgoDeckParser.cs" />
     <Compile Include="Mtg\TcDecksScraper.cs" />
     <Compile Include="Program.cs" />

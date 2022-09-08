@@ -19,6 +19,10 @@ namespace CollectionBuilder
             {
                 return new TcDecksScraper();
             }
+            if (url.Contains("mtggoldfish.com"))
+            {
+                return new MtgGoldfishScraper();
+            }
 
             throw new ArgumentException(string.Format("Could not generate scraper for url: {0}", url), "url");
         }
