@@ -38,12 +38,13 @@
             this.eventAddressText = new System.Windows.Forms.TextBox();
             this.outputText = new System.Windows.Forms.TextBox();
             this.generateOutputButton = new System.Windows.Forms.Button();
+            this.deleteExistingCheckbox = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // browseButton
             // 
             this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseButton.Location = new System.Drawing.Point(399, 24);
+            this.browseButton.Location = new System.Drawing.Point(854, 24);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(75, 23);
             this.browseButton.TabIndex = 5;
@@ -53,11 +54,11 @@
             // 
             // outputFolderText
             // 
-            this.outputFolderText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.outputFolderText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputFolderText.Location = new System.Drawing.Point(15, 27);
             this.outputFolderText.Name = "outputFolderText";
-            this.outputFolderText.Size = new System.Drawing.Size(378, 20);
+            this.outputFolderText.Size = new System.Drawing.Size(833, 20);
             this.outputFolderText.TabIndex = 4;
             // 
             // label1
@@ -71,11 +72,11 @@
             // 
             // outputFileText
             // 
-            this.outputFileText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.outputFileText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputFileText.Location = new System.Drawing.Point(15, 66);
             this.outputFileText.Name = "outputFileText";
-            this.outputFileText.Size = new System.Drawing.Size(459, 20);
+            this.outputFileText.Size = new System.Drawing.Size(914, 20);
             this.outputFileText.TabIndex = 13;
             // 
             // label4
@@ -99,7 +100,7 @@
             // getDecksButton
             // 
             this.getDecksButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.getDecksButton.Location = new System.Drawing.Point(15, 357);
+            this.getDecksButton.Location = new System.Drawing.Point(15, 694);
             this.getDecksButton.Name = "getDecksButton";
             this.getDecksButton.Size = new System.Drawing.Size(75, 23);
             this.getDecksButton.TabIndex = 16;
@@ -109,31 +110,31 @@
             // 
             // eventAddressText
             // 
-            this.eventAddressText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.eventAddressText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.eventAddressText.Location = new System.Drawing.Point(15, 105);
             this.eventAddressText.Multiline = true;
             this.eventAddressText.Name = "eventAddressText";
-            this.eventAddressText.Size = new System.Drawing.Size(225, 246);
+            this.eventAddressText.Size = new System.Drawing.Size(914, 275);
             this.eventAddressText.TabIndex = 15;
             // 
             // outputText
             // 
-            this.outputText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.outputText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputText.Location = new System.Drawing.Point(246, 105);
+            this.outputText.Location = new System.Drawing.Point(15, 394);
             this.outputText.Multiline = true;
             this.outputText.Name = "outputText";
             this.outputText.ReadOnly = true;
             this.outputText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.outputText.Size = new System.Drawing.Size(228, 246);
+            this.outputText.Size = new System.Drawing.Size(914, 294);
             this.outputText.TabIndex = 17;
             // 
             // generateOutputButton
             // 
-            this.generateOutputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.generateOutputButton.Location = new System.Drawing.Point(96, 357);
+            this.generateOutputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.generateOutputButton.Location = new System.Drawing.Point(818, 694);
             this.generateOutputButton.Name = "generateOutputButton";
             this.generateOutputButton.Size = new System.Drawing.Size(111, 23);
             this.generateOutputButton.TabIndex = 18;
@@ -141,11 +142,25 @@
             this.generateOutputButton.UseVisualStyleBackColor = true;
             this.generateOutputButton.Click += new System.EventHandler(this.generateOutputButton_Click);
             // 
+            // deleteExistingCheckbox
+            // 
+            this.deleteExistingCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.deleteExistingCheckbox.AutoSize = true;
+            this.deleteExistingCheckbox.Checked = true;
+            this.deleteExistingCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.deleteExistingCheckbox.Location = new System.Drawing.Point(96, 698);
+            this.deleteExistingCheckbox.Name = "deleteExistingCheckbox";
+            this.deleteExistingCheckbox.Size = new System.Drawing.Size(145, 17);
+            this.deleteExistingCheckbox.TabIndex = 19;
+            this.deleteExistingCheckbox.Text = "Delete Existing Database";
+            this.deleteExistingCheckbox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(486, 392);
+            this.ClientSize = new System.Drawing.Size(941, 729);
+            this.Controls.Add(this.deleteExistingCheckbox);
             this.Controls.Add(this.generateOutputButton);
             this.Controls.Add(this.outputText);
             this.Controls.Add(this.getDecksButton);
@@ -175,6 +190,7 @@
         private System.Windows.Forms.TextBox eventAddressText;
         private System.Windows.Forms.TextBox outputText;
         private System.Windows.Forms.Button generateOutputButton;
+        private System.Windows.Forms.CheckBox deleteExistingCheckbox;
     }
 }
 

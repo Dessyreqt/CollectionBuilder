@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using CollectionBuilder.Common;
-using CollectionBuilder.Data;
 using CollectionBuilder.Properties;
 
 namespace CollectionBuilder
@@ -23,6 +15,10 @@ namespace CollectionBuilder
             InitializeComponent();
             LoadSettings();
         }
+
+        private delegate void EnableGetDecksButtonCallback();
+
+        private delegate void AddOutputCallback(string text);
 
         private void LoadSettings()
         {
@@ -65,40 +61,29 @@ namespace CollectionBuilder
 
             var filename = GetOutputLocation();
 
-            if (File.Exists(filename))
-            {
-                File.Delete(filename);
-            }
+            if (deleteExistingCheckbox.Checked && File.Exists(filename)) { File.Delete(filename); }
 
             try
             {
-                foreach (string line in eventAddressText.Lines)
+                foreach (var line in eventAddressText.Lines)
                 {
-                    IDeckScraper scraper = DeckScraperFactory.GetDeckScraper(line);
+                    if (string.IsNullOrWhiteSpace(line)) { continue; }
+
+                    var scraper = DeckScraperFactory.GetDeckScraper(line);
 
                     var gameType = GetGameType();
 
-                    if (!Directory.Exists(outputFolderText.Text))
-                    {
-                        Directory.CreateDirectory(outputFolderText.Text);
-                    }
+                    if (!Directory.Exists(outputFolderText.Text)) { Directory.CreateDirectory(outputFolderText.Text); }
 
-                    IDeckWriter writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
+                    var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
                     scraper.GetDecks(line, writer);
                 }
             }
-            catch (ArgumentException ex)
-            {
-                AddOutput(String.Format("{0}{1}", ex.Message, Environment.NewLine));
-            }
-            finally
-            {
-                EnableGetDecksButton();
-            }
-            AddOutput(String.Format("Finished grabbing decks."));
-        }
+            catch (ArgumentException ex) { AddOutput(String.Format("{0}{1}", ex.Message, Environment.NewLine)); }
+            finally { EnableGetDecksButton(); }
 
-        private delegate void EnableGetDecksButtonCallback();
+            AddOutput("Finished grabbing decks.");
+        }
 
         private void EnableGetDecksButton()
         {
@@ -114,10 +99,7 @@ namespace CollectionBuilder
                     //This is probably safely ignored.
                 }
             }
-            else
-            {
-                getDecksButton.Enabled = true;
-            }
+            else { getDecksButton.Enabled = true; }
         }
 
         private string GetOutputLocation()
@@ -126,6 +108,7 @@ namespace CollectionBuilder
 
             return string.Format("{0}{1}.sdf", outputFolderText.Text, outputFileText.Text);
         }
+
         private DeckWriterGameType GetGameType()
         {
             return DeckWriterGameType.Mtg;
@@ -141,8 +124,6 @@ namespace CollectionBuilder
             }
         }
 
-        private delegate void AddOutputCallback(string text);
-
         private void AddOutput(string text)
         {
             if (outputText.InvokeRequired)
@@ -150,17 +131,14 @@ namespace CollectionBuilder
                 try
                 {
                     var d = new AddOutputCallback(AddOutput);
-                    Invoke(d, new[] { text });
+                    Invoke(d, text);
                 }
                 catch (InvalidOperationException)
                 {
                     //This is probably safely ignored.
                 }
             }
-            else
-            {
-                outputText.Text += text;
-            }
+            else { outputText.Text += text; }
         }
 
         private void generateOutputButton_Click(object sender, EventArgs e)
@@ -169,12 +147,12 @@ namespace CollectionBuilder
             Settings.Default.OutputFolder = outputFolderText.Text;
             Settings.Default.EventAddresses = eventAddressText.Text;
             Settings.Default.Save();
-            
+
             var filename = GetOutputLocation();
             var gameType = GetGameType();
 
-            IDeckWriter writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
-            IDeck deck = writer.GetDeckFromCollection();
+            var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
+            var deck = writer.GetDeckFromCollection();
 
             outputText.Text = deck.GetFormattedList();
         }

@@ -1,12 +1,9 @@
 ﻿namespace CollectionBuilder.Mtg
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading;
-    using System.Threading.Tasks;
     using CollectionBuilder.Data;
 
     public class MtgGoldfishScraper : DeckScraperBase
@@ -15,8 +12,7 @@
         {
             var response = GetResponse(url);
 
-            if (String.IsNullOrWhiteSpace(response))
-                return;
+            if (String.IsNullOrWhiteSpace(response)) { return; }
 
             var urlPattern = new Regex(@"/deck/\d+");
             var matches = urlPattern.Matches(response);
@@ -29,14 +25,12 @@
 
                 var parser = new MtgoDeckParser();
                 var parsedDeck = parser.ParseDeck(deck);
-                if (parsedDeck.IsValid())
-                {
-                    writer.WriteDeck(parsedDeck);
-                }
+                if (parsedDeck.IsValid()) { writer.WriteDeck(parsedDeck); }
             }
 
             Thread.Sleep(100);
         }
+
         public override string GetDeck(string url)
         {
             var deckList = GetResponse(url);
