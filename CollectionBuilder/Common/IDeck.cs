@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
+﻿namespace CollectionBuilder.Common;
 
-namespace CollectionBuilder.Common
+public interface IDeck
 {
-    public interface IDeck
-    {
-        bool IsValid();
-        void AddCard(string card);
-        List<string> GetContents();
-        string GetFormattedList();
-    }
+    List<string> Errors { get; }
+    bool IsValid();
+    void AddCard(string card);
+    List<string> GetContents();
+    string GetFormattedList();
 }

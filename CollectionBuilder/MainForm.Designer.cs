@@ -141,7 +141,7 @@
             outputText.Size = new Size(1066, 306);
             outputText.TabIndex = 17;
             // 
-            // generateOutputButton
+            // outputCollectionButton
             // 
             outputCollectionButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             outputCollectionButton.Location = new Point(954, 801);
@@ -163,6 +163,7 @@
             newSessionButton.TabIndex = 20;
             newSessionButton.Text = "New Session";
             newSessionButton.UseVisualStyleBackColor = true;
+            newSessionButton.Click += newSessionButton_Click;
             // 
             // label3
             // 
@@ -182,6 +183,7 @@
             addSessionButton.TabIndex = 22;
             addSessionButton.Text = "Add cards to Session";
             addSessionButton.UseVisualStyleBackColor = true;
+            addSessionButton.Click += addSessionButton_Click;
             // 
             // outputSessionButton
             // 
@@ -205,6 +207,7 @@
             mergeSessionButton.TabIndex = 24;
             mergeSessionButton.Text = "Merge cards to Session";
             mergeSessionButton.UseVisualStyleBackColor = true;
+            mergeSessionButton.Click += mergeSessionButton_Click;
             // 
             // clearSessionLabel
             // 

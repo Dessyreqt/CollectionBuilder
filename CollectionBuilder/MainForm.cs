@@ -1,4 +1,5 @@
-﻿using CollectionBuilder.Properties;
+﻿using CollectionBuilder.Mtg;
+using CollectionBuilder.Properties;
 
 namespace CollectionBuilder;
 
@@ -47,7 +48,7 @@ public partial class MainForm : Form
 
     private void ScrapeDecks()
     {
-        AddOutput(String.Format("Grabbing decks from {0}{1}", listTextBox.Text, Environment.NewLine));
+        AddOutput($"Grabbing decks from {listTextBox.Text}{Environment.NewLine}");
 
         var filename = sessionDatabaseTextBox.Text;
 
@@ -58,14 +59,12 @@ public partial class MainForm : Form
                 if (string.IsNullOrWhiteSpace(line)) { continue; }
 
                 var scraper = DeckScraperFactory.GetDeckScraper(line);
-
                 var gameType = GetGameType();
-
                 var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
                 scraper.GetDecks(line, writer);
             }
         }
-        catch (ArgumentException ex) { AddOutput(String.Format("{0}{1}", ex.Message, Environment.NewLine)); }
+        catch (ArgumentException ex) { AddOutput($"{ex.Message}{Environment.NewLine}"); }
         finally { EnableGetDecksButton(); }
 
         AddOutput("Finished grabbing decks.");
@@ -110,7 +109,7 @@ public partial class MainForm : Form
         else { outputText.Text += text; }
     }
 
-    private void OutputCollectionButtonClick(object sender, EventArgs e)
+    private async void OutputCollectionButtonClick(object sender, EventArgs e)
     {
         Settings.Default.EventAddresses = listTextBox.Text;
         Settings.Default.Save();
@@ -119,7 +118,7 @@ public partial class MainForm : Form
         var gameType = GetGameType();
 
         var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
-        var deck = writer.GetDeckFromCollection();
+        var deck = await writer.GetDeckFromCollectionAsync();
 
         outputText.Text = deck.GetFormattedList();
     }
@@ -132,7 +131,7 @@ public partial class MainForm : Form
         await writer.ClearCollectionAsync();
     }
 
-    private void outputSessionButton_Click(object sender, EventArgs e)
+    private async void outputSessionButton_Click(object sender, EventArgs e)
     {
         Settings.Default.EventAddresses = listTextBox.Text;
         Settings.Default.Save();
@@ -141,8 +140,42 @@ public partial class MainForm : Form
         var gameType = GetGameType();
 
         var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
-        var deck = writer.GetDeckFromCollection();
+        var deck = await writer.GetDeckFromCollectionAsync();
 
         outputText.Text = deck.GetFormattedList();
+    }
+
+    private void newSessionButton_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("Not implemented yet...");
+    }
+
+    private void addSessionButton_Click(object sender, EventArgs e)
+    {
+        MessageBox.Show("Not implemented yet...");
+    }
+
+    private void mergeSessionButton_Click(object sender, EventArgs e)
+    {
+        var parser = new MtgoDeckParser();
+        var filename = sessionDatabaseTextBox.Text;
+        var gameType = GetGameType();
+        var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
+        var parsedDeck = parser.ParseDeck(listTextBox.Text);
+
+        outputText.Text = "";
+
+        if (parsedDeck.IsValid())
+        {
+            writer.WriteDeck(parsedDeck);
+            AddOutput("Added cards to deck");
+        }
+        else
+        {
+            AddOutput($"Deck is not valid:{Environment.NewLine}");
+
+            foreach (var error in parsedDeck.Errors)
+                AddOutput($"{error}{Environment.NewLine}");
+        }
     }
 }

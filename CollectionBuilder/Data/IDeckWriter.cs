@@ -5,6 +5,6 @@ namespace CollectionBuilder.Data;
 public interface IDeckWriter
 {
     void WriteDeck(IDeck deck);
-    IDeck GetDeckFromCollection();
+    Task<IDeck> GetDeckFromCollectionAsync();
     Task ClearCollectionAsync();
 }
