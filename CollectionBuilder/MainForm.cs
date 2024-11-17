@@ -1,160 +1,155 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Windows.Forms;
-using CollectionBuilder.Properties;
+﻿using CollectionBuilder.Properties;
 
-namespace CollectionBuilder
+namespace CollectionBuilder;
+
+public partial class MainForm : Form
 {
-    public partial class MainForm : Form
+    private Thread scraperThread;
+
+    public MainForm()
     {
-        private Thread scraperThread;
+        InitializeComponent();
+        LoadSettings();
+    }
 
-        public MainForm()
+    private delegate void EnableGetDecksButtonCallback();
+
+    private delegate void AddOutputCallback(string text);
+
+    private void LoadSettings()
+    {
+        outputFolderText.Text = Settings.Default.OutputFolder;
+        eventAddressText.Text = Settings.Default.EventAddresses;
+        outputFileText.Text = Settings.Default.OutputCollection;
+    }
+
+    private void browseButton_Click(object sender, EventArgs e)
+    {
+        var browser = new FolderBrowserDialog();
+        browser.SelectedPath = outputFolderText.Text;
+
+        if (browser.ShowDialog() == DialogResult.OK)
         {
-            InitializeComponent();
-            LoadSettings();
+            outputFolderText.Text = browser.SelectedPath;
+            Settings.Default.OutputFolder = browser.SelectedPath;
+            Settings.Default.Save();
         }
+    }
 
-        private delegate void EnableGetDecksButtonCallback();
+    private void getDecksButton_Click(object sender, EventArgs e)
+    {
+        FixOutputFolder();
 
-        private delegate void AddOutputCallback(string text);
+        outputText.Text = "";
 
-        private void LoadSettings()
+        Settings.Default.OutputCollection = outputFileText.Text;
+        Settings.Default.EventAddresses = eventAddressText.Text;
+        Settings.Default.Save();
+
+        getDecksButton.Enabled = false;
+        scraperThread = new(ScrapeDecks);
+        scraperThread.Start();
+    }
+
+    private void ScrapeDecks()
+    {
+        AddOutput(String.Format("Grabbing decks from {0}{1}", eventAddressText.Text, Environment.NewLine));
+
+        var filename = GetOutputLocation();
+
+        if (deleteExistingCheckbox.Checked && File.Exists(filename)) { File.Delete(filename); }
+
+        try
         {
-            outputFolderText.Text = Settings.Default.OutputFolder;
-            eventAddressText.Text = Settings.Default.EventAddresses;
-            outputFileText.Text = Settings.Default.OutputCollection;
-        }
-
-        private void browseButton_Click(object sender, EventArgs e)
-        {
-            var browser = new FolderBrowserDialog();
-            browser.SelectedPath = outputFolderText.Text;
-
-            if (browser.ShowDialog() == DialogResult.OK)
+            foreach (var line in eventAddressText.Lines)
             {
-                outputFolderText.Text = browser.SelectedPath;
-                Settings.Default.OutputFolder = browser.SelectedPath;
-                Settings.Default.Save();
+                if (string.IsNullOrWhiteSpace(line)) { continue; }
+
+                var scraper = DeckScraperFactory.GetDeckScraper(line);
+
+                var gameType = GetGameType();
+
+                if (!Directory.Exists(outputFolderText.Text)) { Directory.CreateDirectory(outputFolderText.Text); }
+
+                var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
+                scraper.GetDecks(line, writer);
             }
         }
+        catch (ArgumentException ex) { AddOutput(String.Format("{0}{1}", ex.Message, Environment.NewLine)); }
+        finally { EnableGetDecksButton(); }
 
-        private void getDecksButton_Click(object sender, EventArgs e)
+        AddOutput("Finished grabbing decks.");
+    }
+
+    private void EnableGetDecksButton()
+    {
+        if (outputText.InvokeRequired)
         {
-            FixOutputFolder();
-
-            outputText.Text = "";
-
-            Settings.Default.OutputCollection = outputFileText.Text;
-            Settings.Default.EventAddresses = eventAddressText.Text;
-            Settings.Default.Save();
-
-            getDecksButton.Enabled = false;
-            scraperThread = new Thread(ScrapeDecks);
-            scraperThread.Start();
-        }
-
-        private void ScrapeDecks()
-        {
-            AddOutput(String.Format("Grabbing decks from {0}{1}", eventAddressText.Text, Environment.NewLine));
-
-            var filename = GetOutputLocation();
-
-            if (deleteExistingCheckbox.Checked && File.Exists(filename)) { File.Delete(filename); }
-
             try
             {
-                foreach (var line in eventAddressText.Lines)
-                {
-                    if (string.IsNullOrWhiteSpace(line)) { continue; }
-
-                    var scraper = DeckScraperFactory.GetDeckScraper(line);
-
-                    var gameType = GetGameType();
-
-                    if (!Directory.Exists(outputFolderText.Text)) { Directory.CreateDirectory(outputFolderText.Text); }
-
-                    var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
-                    scraper.GetDecks(line, writer);
-                }
+                var d = new EnableGetDecksButtonCallback(EnableGetDecksButton);
+                Invoke(d);
             }
-            catch (ArgumentException ex) { AddOutput(String.Format("{0}{1}", ex.Message, Environment.NewLine)); }
-            finally { EnableGetDecksButton(); }
-
-            AddOutput("Finished grabbing decks.");
-        }
-
-        private void EnableGetDecksButton()
-        {
-            if (outputText.InvokeRequired)
+            catch (InvalidOperationException)
             {
-                try
-                {
-                    var d = new EnableGetDecksButtonCallback(EnableGetDecksButton);
-                    Invoke(d);
-                }
-                catch (InvalidOperationException)
-                {
-                    //This is probably safely ignored.
-                }
-            }
-            else { getDecksButton.Enabled = true; }
-        }
-
-        private string GetOutputLocation()
-        {
-            FixOutputFolder();
-
-            return string.Format("{0}{1}.sdf", outputFolderText.Text, outputFileText.Text);
-        }
-
-        private DeckWriterGameType GetGameType()
-        {
-            return DeckWriterGameType.Mtg;
-        }
-
-        private void FixOutputFolder()
-        {
-            if (!outputFolderText.Text.EndsWith("\\"))
-            {
-                outputFolderText.Text += "\\";
-                Settings.Default.OutputFolder = outputFolderText.Text;
-                Settings.Default.Save();
+                //This is probably safely ignored.
             }
         }
+        else { getDecksButton.Enabled = true; }
+    }
 
-        private void AddOutput(string text)
-        {
-            if (outputText.InvokeRequired)
-            {
-                try
-                {
-                    var d = new AddOutputCallback(AddOutput);
-                    Invoke(d, text);
-                }
-                catch (InvalidOperationException)
-                {
-                    //This is probably safely ignored.
-                }
-            }
-            else { outputText.Text += text; }
-        }
+    private string GetOutputLocation()
+    {
+        FixOutputFolder();
 
-        private void generateOutputButton_Click(object sender, EventArgs e)
+        return string.Format("{0}{1}.db", outputFolderText.Text, outputFileText.Text);
+    }
+
+    private DeckWriterGameType GetGameType()
+    {
+        return DeckWriterGameType.Mtg;
+    }
+
+    private void FixOutputFolder()
+    {
+        if (!outputFolderText.Text.EndsWith("\\"))
         {
-            Settings.Default.OutputCollection = outputFileText.Text;
+            outputFolderText.Text += "\\";
             Settings.Default.OutputFolder = outputFolderText.Text;
-            Settings.Default.EventAddresses = eventAddressText.Text;
             Settings.Default.Save();
-
-            var filename = GetOutputLocation();
-            var gameType = GetGameType();
-
-            var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
-            var deck = writer.GetDeckFromCollection();
-
-            outputText.Text = deck.GetFormattedList();
         }
+    }
+
+    private void AddOutput(string text)
+    {
+        if (outputText.InvokeRequired)
+        {
+            try
+            {
+                var d = new AddOutputCallback(AddOutput);
+                Invoke(d, text);
+            }
+            catch (InvalidOperationException)
+            {
+                //This is probably safely ignored.
+            }
+        }
+        else { outputText.Text += text; }
+    }
+
+    private void generateOutputButton_Click(object sender, EventArgs e)
+    {
+        Settings.Default.OutputCollection = outputFileText.Text;
+        Settings.Default.OutputFolder = outputFolderText.Text;
+        Settings.Default.EventAddresses = eventAddressText.Text;
+        Settings.Default.Save();
+
+        var filename = GetOutputLocation();
+        var gameType = GetGameType();
+
+        var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
+        var deck = writer.GetDeckFromCollection();
+
+        outputText.Text = deck.GetFormattedList();
     }
 }
