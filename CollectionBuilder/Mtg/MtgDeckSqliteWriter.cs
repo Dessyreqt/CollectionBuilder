@@ -1,5 +1,6 @@
 ﻿using CollectionBuilder.Common;
 using CollectionBuilder.Data;
+using Dapper;
 using Microsoft.Data.Sqlite;
 
 namespace CollectionBuilder.Mtg;
@@ -51,6 +52,13 @@ public class MtgDeckSqliteWriter : BaseSqliteDeckDatabase, IDeckWriter
         }
 
         return retVal;
+    }
+
+    public async Task ClearCollectionAsync()
+    {
+        await using var connection = new SqliteConnection(ConnectionString);
+        var query = "delete from Collection";
+        await connection.ExecuteAsync(query);
     }
 
     private void InsertCards(SqliteConnection conn, MtgDeck deck)

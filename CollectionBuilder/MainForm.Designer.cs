@@ -28,169 +28,242 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.browseButton = new System.Windows.Forms.Button();
-            this.outputFolderText = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.outputFileText = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.getDecksButton = new System.Windows.Forms.Button();
-            this.eventAddressText = new System.Windows.Forms.TextBox();
-            this.outputText = new System.Windows.Forms.TextBox();
-            this.generateOutputButton = new System.Windows.Forms.Button();
-            this.deleteExistingCheckbox = new System.Windows.Forms.CheckBox();
-            this.SuspendLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            browseButton = new Button();
+            collectionDatabaseTextBox = new TextBox();
+            label1 = new Label();
+            sessionDatabaseTextBox = new TextBox();
+            label4 = new Label();
+            label2 = new Label();
+            getDecksButton = new Button();
+            listTextBox = new TextBox();
+            outputText = new TextBox();
+            outputCollectionButton = new Button();
+            newSessionButton = new Button();
+            label3 = new Label();
+            addSessionButton = new Button();
+            outputSessionButton = new Button();
+            mergeSessionButton = new Button();
+            clearSessionLabel = new LinkLabel();
+            SuspendLayout();
             // 
             // browseButton
             // 
-            this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseButton.Location = new System.Drawing.Point(854, 24);
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(75, 23);
-            this.browseButton.TabIndex = 5;
-            this.browseButton.Text = "Browse";
-            this.browseButton.UseVisualStyleBackColor = true;
-            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+            browseButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            browseButton.Location = new Point(996, 28);
+            browseButton.Margin = new Padding(4, 3, 4, 3);
+            browseButton.Name = "browseButton";
+            browseButton.Size = new Size(88, 27);
+            browseButton.TabIndex = 5;
+            browseButton.Text = "Browse";
+            browseButton.UseVisualStyleBackColor = true;
+            browseButton.Click += browseButton_Click;
             // 
-            // outputFolderText
+            // collectionDatabaseTextBox
             // 
-            this.outputFolderText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputFolderText.Location = new System.Drawing.Point(15, 27);
-            this.outputFolderText.Name = "outputFolderText";
-            this.outputFolderText.Size = new System.Drawing.Size(833, 20);
-            this.outputFolderText.TabIndex = 4;
+            collectionDatabaseTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            collectionDatabaseTextBox.Location = new Point(18, 31);
+            collectionDatabaseTextBox.Margin = new Padding(4, 3, 4, 3);
+            collectionDatabaseTextBox.Name = "collectionDatabaseTextBox";
+            collectionDatabaseTextBox.Size = new Size(971, 23);
+            collectionDatabaseTextBox.TabIndex = 4;
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(71, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Output Folder";
+            label1.AutoSize = true;
+            label1.Location = new Point(14, 10);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(112, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Collection Database";
             // 
-            // outputFileText
+            // sessionDatabaseTextBox
             // 
-            this.outputFileText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputFileText.Location = new System.Drawing.Point(15, 66);
-            this.outputFileText.Name = "outputFileText";
-            this.outputFileText.Size = new System.Drawing.Size(914, 20);
-            this.outputFileText.TabIndex = 13;
+            sessionDatabaseTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            sessionDatabaseTextBox.Location = new Point(18, 76);
+            sessionDatabaseTextBox.Margin = new Padding(4, 3, 4, 3);
+            sessionDatabaseTextBox.Name = "sessionDatabaseTextBox";
+            sessionDatabaseTextBox.Size = new Size(971, 23);
+            sessionDatabaseTextBox.TabIndex = 13;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 49);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(195, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "Output File (extension will be appended)";
+            label4.AutoSize = true;
+            label4.Location = new Point(14, 57);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(97, 15);
+            label4.TabIndex = 12;
+            label4.Text = "Session Database";
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 89);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 13);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Event Addresses";
+            label2.AutoSize = true;
+            label2.Location = new Point(14, 144);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(162, 15);
+            label2.TabIndex = 14;
+            label2.Text = "List of Cards/Event Addresses";
             // 
             // getDecksButton
             // 
-            this.getDecksButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.getDecksButton.Location = new System.Drawing.Point(15, 694);
-            this.getDecksButton.Name = "getDecksButton";
-            this.getDecksButton.Size = new System.Drawing.Size(75, 23);
-            this.getDecksButton.TabIndex = 16;
-            this.getDecksButton.Text = "Get Decks";
-            this.getDecksButton.UseVisualStyleBackColor = true;
-            this.getDecksButton.Click += new System.EventHandler(this.getDecksButton_Click);
+            getDecksButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            getDecksButton.Location = new Point(926, 444);
+            getDecksButton.Margin = new Padding(4, 3, 4, 3);
+            getDecksButton.Name = "getDecksButton";
+            getDecksButton.Size = new Size(158, 27);
+            getDecksButton.TabIndex = 16;
+            getDecksButton.Text = "Scrape Decks to Session";
+            getDecksButton.UseVisualStyleBackColor = true;
+            getDecksButton.Click += getDecksButton_Click;
             // 
-            // eventAddressText
+            // listTextBox
             // 
-            this.eventAddressText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.eventAddressText.Location = new System.Drawing.Point(15, 105);
-            this.eventAddressText.Multiline = true;
-            this.eventAddressText.Name = "eventAddressText";
-            this.eventAddressText.Size = new System.Drawing.Size(914, 275);
-            this.eventAddressText.TabIndex = 15;
+            listTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            listTextBox.Location = new Point(18, 162);
+            listTextBox.Margin = new Padding(4, 3, 4, 3);
+            listTextBox.Multiline = true;
+            listTextBox.Name = "listTextBox";
+            listTextBox.Size = new Size(1066, 276);
+            listTextBox.TabIndex = 15;
             // 
             // outputText
             // 
-            this.outputText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputText.Location = new System.Drawing.Point(15, 394);
-            this.outputText.Multiline = true;
-            this.outputText.Name = "outputText";
-            this.outputText.ReadOnly = true;
-            this.outputText.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.outputText.Size = new System.Drawing.Size(914, 294);
-            this.outputText.TabIndex = 17;
+            outputText.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            outputText.Location = new Point(18, 488);
+            outputText.Margin = new Padding(4, 3, 4, 3);
+            outputText.Multiline = true;
+            outputText.Name = "outputText";
+            outputText.ReadOnly = true;
+            outputText.ScrollBars = ScrollBars.Both;
+            outputText.Size = new Size(1066, 306);
+            outputText.TabIndex = 17;
             // 
             // generateOutputButton
             // 
-            this.generateOutputButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.generateOutputButton.Location = new System.Drawing.Point(818, 694);
-            this.generateOutputButton.Name = "generateOutputButton";
-            this.generateOutputButton.Size = new System.Drawing.Size(111, 23);
-            this.generateOutputButton.TabIndex = 18;
-            this.generateOutputButton.Text = "Generate Output";
-            this.generateOutputButton.UseVisualStyleBackColor = true;
-            this.generateOutputButton.Click += new System.EventHandler(this.generateOutputButton_Click);
+            outputCollectionButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            outputCollectionButton.Location = new Point(954, 801);
+            outputCollectionButton.Margin = new Padding(4, 3, 4, 3);
+            outputCollectionButton.Name = "outputCollectionButton";
+            outputCollectionButton.Size = new Size(130, 27);
+            outputCollectionButton.TabIndex = 18;
+            outputCollectionButton.Text = "Output Collection";
+            outputCollectionButton.UseVisualStyleBackColor = true;
+            outputCollectionButton.Click += OutputCollectionButtonClick;
             // 
-            // deleteExistingCheckbox
+            // newSessionButton
             // 
-            this.deleteExistingCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.deleteExistingCheckbox.AutoSize = true;
-            this.deleteExistingCheckbox.Checked = true;
-            this.deleteExistingCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.deleteExistingCheckbox.Location = new System.Drawing.Point(96, 698);
-            this.deleteExistingCheckbox.Name = "deleteExistingCheckbox";
-            this.deleteExistingCheckbox.Size = new System.Drawing.Size(145, 17);
-            this.deleteExistingCheckbox.TabIndex = 19;
-            this.deleteExistingCheckbox.Text = "Delete Existing Database";
-            this.deleteExistingCheckbox.UseVisualStyleBackColor = true;
+            newSessionButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            newSessionButton.Location = new Point(997, 73);
+            newSessionButton.Margin = new Padding(4, 3, 4, 3);
+            newSessionButton.Name = "newSessionButton";
+            newSessionButton.Size = new Size(88, 27);
+            newSessionButton.TabIndex = 20;
+            newSessionButton.Text = "New Session";
+            newSessionButton.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            label3.Location = new Point(18, 102);
+            label3.Name = "label3";
+            label3.Size = new Size(1068, 42);
+            label3.TabIndex = 21;
+            label3.Text = resources.GetString("label3.Text");
+            // 
+            // addSessionButton
+            // 
+            addSessionButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            addSessionButton.Location = new Point(760, 444);
+            addSessionButton.Margin = new Padding(4, 3, 4, 3);
+            addSessionButton.Name = "addSessionButton";
+            addSessionButton.Size = new Size(158, 27);
+            addSessionButton.TabIndex = 22;
+            addSessionButton.Text = "Add cards to Session";
+            addSessionButton.UseVisualStyleBackColor = true;
+            // 
+            // outputSessionButton
+            // 
+            outputSessionButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            outputSessionButton.Location = new Point(816, 802);
+            outputSessionButton.Margin = new Padding(4, 3, 4, 3);
+            outputSessionButton.Name = "outputSessionButton";
+            outputSessionButton.Size = new Size(130, 27);
+            outputSessionButton.TabIndex = 23;
+            outputSessionButton.Text = "Output Session";
+            outputSessionButton.UseVisualStyleBackColor = true;
+            outputSessionButton.Click += outputSessionButton_Click;
+            // 
+            // mergeSessionButton
+            // 
+            mergeSessionButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            mergeSessionButton.Location = new Point(594, 444);
+            mergeSessionButton.Margin = new Padding(4, 3, 4, 3);
+            mergeSessionButton.Name = "mergeSessionButton";
+            mergeSessionButton.Size = new Size(158, 27);
+            mergeSessionButton.TabIndex = 24;
+            mergeSessionButton.Text = "Merge cards to Session";
+            mergeSessionButton.UseVisualStyleBackColor = true;
+            // 
+            // clearSessionLabel
+            // 
+            clearSessionLabel.AutoSize = true;
+            clearSessionLabel.Location = new Point(18, 450);
+            clearSessionLabel.Name = "clearSessionLabel";
+            clearSessionLabel.Size = new Size(76, 15);
+            clearSessionLabel.TabIndex = 25;
+            clearSessionLabel.TabStop = true;
+            clearSessionLabel.Text = "Clear Session";
+            clearSessionLabel.LinkClicked += clearSessionLabel_LinkClicked;
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(941, 729);
-            this.Controls.Add(this.deleteExistingCheckbox);
-            this.Controls.Add(this.generateOutputButton);
-            this.Controls.Add(this.outputText);
-            this.Controls.Add(this.getDecksButton);
-            this.Controls.Add(this.eventAddressText);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.outputFileText);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.browseButton);
-            this.Controls.Add(this.outputFolderText);
-            this.Controls.Add(this.label1);
-            this.Name = "MainForm";
-            this.Text = "Collection Builder";
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(1098, 841);
+            Controls.Add(clearSessionLabel);
+            Controls.Add(mergeSessionButton);
+            Controls.Add(outputSessionButton);
+            Controls.Add(addSessionButton);
+            Controls.Add(label3);
+            Controls.Add(newSessionButton);
+            Controls.Add(outputCollectionButton);
+            Controls.Add(outputText);
+            Controls.Add(getDecksButton);
+            Controls.Add(listTextBox);
+            Controls.Add(label2);
+            Controls.Add(sessionDatabaseTextBox);
+            Controls.Add(label4);
+            Controls.Add(browseButton);
+            Controls.Add(collectionDatabaseTextBox);
+            Controls.Add(label1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "MainForm";
+            Text = "Collection Builder";
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private System.Windows.Forms.Button browseButton;
-        private System.Windows.Forms.TextBox outputFolderText;
+        private System.Windows.Forms.TextBox collectionDatabaseTextBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox outputFileText;
+        private System.Windows.Forms.TextBox sessionDatabaseTextBox;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button getDecksButton;
-        private System.Windows.Forms.TextBox eventAddressText;
+        private System.Windows.Forms.TextBox listTextBox;
         private System.Windows.Forms.TextBox outputText;
-        private System.Windows.Forms.Button generateOutputButton;
+        private System.Windows.Forms.Button outputCollectionButton;
         private System.Windows.Forms.CheckBox deleteExistingCheckbox;
+        private Button newSessionButton;
+        private Label label3;
+        private Button addSessionButton;
+        private Button outputSessionButton;
+        private Button mergeSessionButton;
+        private LinkLabel clearSessionLabel;
     }
 }
 

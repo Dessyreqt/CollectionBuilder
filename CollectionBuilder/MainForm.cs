@@ -18,32 +18,26 @@ public partial class MainForm : Form
 
     private void LoadSettings()
     {
-        outputFolderText.Text = Settings.Default.OutputFolder;
-        eventAddressText.Text = Settings.Default.EventAddresses;
-        outputFileText.Text = Settings.Default.OutputCollection;
+        var defaultFolder = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "CollectionBuilder");
+
+        collectionDatabaseTextBox.Text = Path.Join(defaultFolder, "collection.db");
+        sessionDatabaseTextBox.Text = Path.Join(defaultFolder, "session.db");
+        listTextBox.Text = Settings.Default.EventAddresses;
     }
 
     private void browseButton_Click(object sender, EventArgs e)
     {
-        var browser = new FolderBrowserDialog();
-        browser.SelectedPath = outputFolderText.Text;
+        var browser = new OpenFileDialog();
+        browser.InitialDirectory = collectionDatabaseTextBox.Text;
 
-        if (browser.ShowDialog() == DialogResult.OK)
-        {
-            outputFolderText.Text = browser.SelectedPath;
-            Settings.Default.OutputFolder = browser.SelectedPath;
-            Settings.Default.Save();
-        }
+        if (browser.ShowDialog() == DialogResult.OK) { collectionDatabaseTextBox.Text = browser.FileName; }
     }
 
     private void getDecksButton_Click(object sender, EventArgs e)
     {
-        FixOutputFolder();
-
         outputText.Text = "";
 
-        Settings.Default.OutputCollection = outputFileText.Text;
-        Settings.Default.EventAddresses = eventAddressText.Text;
+        Settings.Default.EventAddresses = listTextBox.Text;
         Settings.Default.Save();
 
         getDecksButton.Enabled = false;
@@ -53,23 +47,19 @@ public partial class MainForm : Form
 
     private void ScrapeDecks()
     {
-        AddOutput(String.Format("Grabbing decks from {0}{1}", eventAddressText.Text, Environment.NewLine));
+        AddOutput(String.Format("Grabbing decks from {0}{1}", listTextBox.Text, Environment.NewLine));
 
-        var filename = GetOutputLocation();
-
-        if (deleteExistingCheckbox.Checked && File.Exists(filename)) { File.Delete(filename); }
+        var filename = sessionDatabaseTextBox.Text;
 
         try
         {
-            foreach (var line in eventAddressText.Lines)
+            foreach (var line in listTextBox.Lines)
             {
                 if (string.IsNullOrWhiteSpace(line)) { continue; }
 
                 var scraper = DeckScraperFactory.GetDeckScraper(line);
 
                 var gameType = GetGameType();
-
-                if (!Directory.Exists(outputFolderText.Text)) { Directory.CreateDirectory(outputFolderText.Text); }
 
                 var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
                 scraper.GetDecks(line, writer);
@@ -98,26 +88,9 @@ public partial class MainForm : Form
         else { getDecksButton.Enabled = true; }
     }
 
-    private string GetOutputLocation()
-    {
-        FixOutputFolder();
-
-        return string.Format("{0}{1}.db", outputFolderText.Text, outputFileText.Text);
-    }
-
     private DeckWriterGameType GetGameType()
     {
         return DeckWriterGameType.Mtg;
-    }
-
-    private void FixOutputFolder()
-    {
-        if (!outputFolderText.Text.EndsWith("\\"))
-        {
-            outputFolderText.Text += "\\";
-            Settings.Default.OutputFolder = outputFolderText.Text;
-            Settings.Default.Save();
-        }
     }
 
     private void AddOutput(string text)
@@ -137,14 +110,34 @@ public partial class MainForm : Form
         else { outputText.Text += text; }
     }
 
-    private void generateOutputButton_Click(object sender, EventArgs e)
+    private void OutputCollectionButtonClick(object sender, EventArgs e)
     {
-        Settings.Default.OutputCollection = outputFileText.Text;
-        Settings.Default.OutputFolder = outputFolderText.Text;
-        Settings.Default.EventAddresses = eventAddressText.Text;
+        Settings.Default.EventAddresses = listTextBox.Text;
         Settings.Default.Save();
 
-        var filename = GetOutputLocation();
+        var filename = sessionDatabaseTextBox.Text;
+        var gameType = GetGameType();
+
+        var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
+        var deck = writer.GetDeckFromCollection();
+
+        outputText.Text = deck.GetFormattedList();
+    }
+
+    private async void clearSessionLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        var filename = sessionDatabaseTextBox.Text;
+        var gameType = GetGameType();
+        var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
+        await writer.ClearCollectionAsync();
+    }
+
+    private void outputSessionButton_Click(object sender, EventArgs e)
+    {
+        Settings.Default.EventAddresses = listTextBox.Text;
+        Settings.Default.Save();
+
+        var filename = sessionDatabaseTextBox.Text;
         var gameType = GetGameType();
 
         var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
