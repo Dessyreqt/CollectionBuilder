@@ -116,19 +116,21 @@ public class MtgDeck : IDeck
     private void AddCardToOutputList(Dictionary<string, List<string>> outputLists, CardDatabase cardDatabase, string card, int count)
     {
         card = card.Trim();
+        var cardData = cardDatabase.Cards.data[card];
 
-        if (cardDatabase.Cards[card] == null)
+        if (cardData is null)
         {
             var fixedCard = FixCardName(card);
+            cardData = cardDatabase.Cards.data[fixedCard];
 
-            if (cardDatabase.Cards.data[fixedCard] == null) { throw new("Could not find card! Please check name!"); }
+            if (cardData is null) { throw new("Could not find card! Please check name!"); }
 
             string group = GetCardGroup(cardDatabase.Cards.data[fixedCard], card);
             AddCardToGroup(outputLists, group, card, count);
         }
         else
         {
-            string group = GetCardGroup(cardDatabase.Cards.data[card], card);
+            string group = GetCardGroup(cardData, card);
             AddCardToGroup(outputLists, group, card, count);
         }
     }
@@ -203,7 +205,9 @@ public class MtgDeck : IDeck
         {
             { "Ã†ther Spellbomb", "Aether Spellbomb" },
             { "Agadeem's Awakening", "Agadeem's Awakening // Agadeem, the Undercrypt" },
+            { "Ajani, Nacatl Pariah", "Ajani, Nacatl Pariah // Ajani, Nacatl Avenger" },
             { "Birgi, God of Storytelling", "Birgi, God of Storytelling // Harnfel, Horn of Bounty" },
+            { "Boggart Trawler", "Boggart Trawler // Boggart Bog" },
             { "Bonecrusher Giant", "Bonecrusher Giant // Stomp" },
             { "Brazen Borrower", "Brazen Borrower // Petty Theft" },
             { "Brutal Cathar", "Brutal Cathar // Moonrage Brute" },
@@ -216,6 +220,7 @@ public class MtgDeck : IDeck
             { "Huntmaster of the Fells", "Huntmaster of the Fells // Ravager of the Fells" },
             { "Invasion of Ikoria", "Invasion of Ikoria // Zilortha, Apex of Ikoria" },
             { "Jace, Vryn's Prodigy", "Jace, Vryn's Prodigy // Jace, Telepath Unbound" },
+            { "Kellan, the Fae-Blooded", "Kellan, the Fae-Blooded // Birthright Boon" },
             { "Lim-Dul's Vault", "Lim-Dûl's Vault" },
             { "Lorien Revealed", "Lórien Revealed" },
             { "Malevolent Hermit", "Malevolent Hermit // Benevolent Geist" },
@@ -227,6 +232,7 @@ public class MtgDeck : IDeck
             { "Sea Gate Restoration", "Sea Gate Restoration // Sea Gate, Reborn" },
             { "Shatterskull Smashing", "Shatterskull Smashing // Shatterskull, the Hammer Pass" },
             { "Silundi Vision", "Silundi Vision // Silundi Isle" },
+            { "Sundering Eruption", "Sundering Eruption // Volcanic Fissure" },
             { "Starscream, Power Hungry", "Starscream, Power Hungry // Starscream, Seeker Leader" },
             { "The Mightstone and Weakstone", "The Mightstone and Weakstone // Urza, Planeswalker" },
             { "Thing in the Ice", "Thing in the Ice // Awoken Horror" },
@@ -236,6 +242,7 @@ public class MtgDeck : IDeck
             { "Valakut Awakening", "Valakut Awakening // Valakut Stoneforge" },
             { "Valki, God of Lies", "Valki, God of Lies // Tibalt, Cosmic Impostor" },
             { "Wear/Tear", "Wear // Tear" },
+            { "Witch Enchanter", "Witch Enchanter // Witch-Blessed Meadow" },
         };
 
         if (replacements.ContainsKey(card)) { card = replacements[card]; }

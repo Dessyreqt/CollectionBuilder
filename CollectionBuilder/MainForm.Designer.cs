@@ -45,6 +45,7 @@
             outputSessionButton = new Button();
             mergeSessionButton = new Button();
             clearSessionLabel = new LinkLabel();
+            updateCardDatabaseButton = new Button();
             SuspendLayout();
             // 
             // browseButton
@@ -109,7 +110,7 @@
             // 
             // getDecksButton
             // 
-            getDecksButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            getDecksButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             getDecksButton.Location = new Point(926, 444);
             getDecksButton.Margin = new Padding(4, 3, 4, 3);
             getDecksButton.Name = "getDecksButton";
@@ -175,7 +176,7 @@
             // 
             // addSessionButton
             // 
-            addSessionButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            addSessionButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             addSessionButton.Location = new Point(760, 444);
             addSessionButton.Margin = new Padding(4, 3, 4, 3);
             addSessionButton.Name = "addSessionButton";
@@ -199,7 +200,7 @@
             // 
             // mergeSessionButton
             // 
-            mergeSessionButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            mergeSessionButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             mergeSessionButton.Location = new Point(594, 444);
             mergeSessionButton.Margin = new Padding(4, 3, 4, 3);
             mergeSessionButton.Name = "mergeSessionButton";
@@ -220,11 +221,24 @@
             clearSessionLabel.Text = "Clear Session";
             clearSessionLabel.LinkClicked += clearSessionLabel_LinkClicked;
             // 
+            // updateCardDatabaseButton
+            // 
+            updateCardDatabaseButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            updateCardDatabaseButton.Location = new Point(640, 802);
+            updateCardDatabaseButton.Margin = new Padding(4, 3, 4, 3);
+            updateCardDatabaseButton.Name = "updateCardDatabaseButton";
+            updateCardDatabaseButton.Size = new Size(168, 27);
+            updateCardDatabaseButton.TabIndex = 26;
+            updateCardDatabaseButton.Text = "Update Card Database";
+            updateCardDatabaseButton.UseVisualStyleBackColor = true;
+            updateCardDatabaseButton.Click += updateCardDatabaseButton_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1098, 841);
+            Controls.Add(updateCardDatabaseButton);
             Controls.Add(clearSessionLabel);
             Controls.Add(mergeSessionButton);
             Controls.Add(outputSessionButton);
@@ -267,6 +281,7 @@
         private Button outputSessionButton;
         private Button mergeSessionButton;
         private LinkLabel clearSessionLabel;
+        private Button updateCardDatabaseButton;
     }
 }
 

@@ -152,7 +152,16 @@ public partial class MainForm : Form
 
     private void addSessionButton_Click(object sender, EventArgs e)
     {
-        MessageBox.Show("Not implemented yet...");
+        var parser = new MtgoDeckParser();
+        var filename = sessionDatabaseTextBox.Text;
+        var gameType = GetGameType();
+        var writer = DeckWriterFactory.GetDeckWriter(gameType, filename);
+        var parsedDeck = parser.ParseDeck(listTextBox.Text);
+
+        outputText.Text = "";
+
+        writer.WriteDeck(parsedDeck, true);
+        AddOutput("Added cards to deck");
     }
 
     private void mergeSessionButton_Click(object sender, EventArgs e)
@@ -165,17 +174,13 @@ public partial class MainForm : Form
 
         outputText.Text = "";
 
-        if (parsedDeck.IsValid())
-        {
-            writer.WriteDeck(parsedDeck);
-            AddOutput("Added cards to deck");
-        }
-        else
-        {
-            AddOutput($"Deck is not valid:{Environment.NewLine}");
+        writer.WriteDeck(parsedDeck);
+        AddOutput("Added cards to deck");
+    }
 
-            foreach (var error in parsedDeck.Errors)
-                AddOutput($"{error}{Environment.NewLine}");
-        }
+    private void updateCardDatabaseButton_Click(object sender, EventArgs e)
+    {
+        var updateDatabaseForm = new UpdateDatabaseForm();
+        updateDatabaseForm.ShowDialog();
     }
 }

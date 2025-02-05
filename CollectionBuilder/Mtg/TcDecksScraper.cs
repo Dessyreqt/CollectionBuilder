@@ -1,46 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
+﻿using System.Text.RegularExpressions;
 using CollectionBuilder.Data;
 
-namespace CollectionBuilder.Mtg
+namespace CollectionBuilder.Mtg;
+
+public class TcDecksScraper : DeckScraperBase
 {
-    public class TcDecksScraper : DeckScraperBase
+    public override void GetDecks(string url, IDeckWriter writer)
     {
-        public override void GetDecks(string url, IDeckWriter writer)
+        var response = GetResponse(url);
+
+        if (String.IsNullOrWhiteSpace(response)) { return; }
+
+        var urlPattern = new Regex(@"id=\d+&iddeck=\d+");
+        var matches = urlPattern.Matches(response);
+        var deckUrls = (from Match match in matches select string.Format("https://www.tcdecks.net/download.php?ext=txt&{0}", match.Value)).ToList();
+
+        foreach (var deckUrl in deckUrls.Distinct())
         {
-            var response = GetResponse(url);
+            var deck = GetDeck(deckUrl);
+            deck = CleanDeck(deck);
 
-            if (String.IsNullOrWhiteSpace(response))
-                return;
+            var parser = new MtgoDeckParser();
+            var parsedDeck = parser.ParseDeck(deck);
 
-            var urlPattern = new Regex(@"id=\d+&iddeck=\d+");
-            var matches = urlPattern.Matches(response);
-            var deckUrls = (from Match match in matches select string.Format("https://tcdecks.net/download.php?ext=txt&{0}", match.Value)).ToList();
+            if (parsedDeck.IsValid()) { writer.WriteDeck(parsedDeck); }
 
-            foreach (var deckUrl in deckUrls.Distinct())
-            {
-                var deck = GetDeck(deckUrl);
-                deck = CleanDeck(deck);
-
-                var parser = new MtgoDeckParser();
-                var parsedDeck = parser.ParseDeck(deck);
-                if (parsedDeck.IsValid())
-                {
-                    writer.WriteDeck(parsedDeck);
-                }
-
-                Thread.Sleep(100);
-            }
+            Thread.Sleep(100);
         }
+    }
 
-        public override string GetDeck(string url)
-        {
-            var deckList = GetResponse(url);
-            return deckList;
-        }
+    public override string GetDeck(string url)
+    {
+        var deckList = GetResponse(url);
+        return deckList;
     }
 }
